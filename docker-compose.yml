@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+ db:
+   container_name: postgres_container
+   image: postgres:latest
+   restart: always
+   environment:
+     POSTGRES_DB: basic3tier
+     POSTGRES_USER: postgres
+     POSTGRES_PASSWORD: admin123
+     PGDATA: /var/lib/postgresql/data
+   ports:
+     - "5432:5432"
+   volumes:
+     - db-data:/var/lib/postgresql/data
+
+
+ pgadmin:
+   container_name: pgadmin4_container
+   image: dpage/pgadmin4:latest
+   restart: always
+   environment:
+     PGADMIN_DEFAULT_EMAIL: henniefrancis@gmail.com
+     PGADMIN_DEFAULT_PASSWORD: henniefrancis
+     PGADMIN_LISTEN_PORT: 8080
+   ports:
+     - "8080:8080"
+   volumes:
+     - pgadmin-data:/var/lib/pgadmin
+
+volumes:
+ db-data:
+ pgadmin-data:
