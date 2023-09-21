@@ -1,33 +1,66 @@
 version: '3.8'
+
 services:
- db:
-   container_name: postgres_container
-   image: postgres:latest
-   restart: always
-   environment:
-     POSTGRES_DB: basic3tier
-     POSTGRES_USER: postgres
-     POSTGRES_PASSWORD: admin123
-     PGDATA: /var/lib/postgresql/data
-   ports:
-     - "5432:5432"
-   volumes:
-     - db-data:/var/lib/postgresql/data
-
-
- pgadmin:
-   container_name: pgadmin4_container
-   image: dpage/pgadmin4:latest
-   restart: always
-   environment:
-     PGADMIN_DEFAULT_EMAIL: henniefrancis@gmail.com
-     PGADMIN_DEFAULT_PASSWORD: henniefrancis
-     PGADMIN_LISTEN_PORT: 8080
-   ports:
-     - "8080:8080"
-   volumes:
-     - pgadmin-data:/var/lib/pgadmin
+  web:
+    container_name: hennie-belt-exam-ui
+    networks:
+      custom_network:
+        ipv4_address: 10.10.0.2
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+    ports:
+      - "82:80"
+  api:
+    container_name: hennie-belt-exam-app
+    networks:
+      custom_network:
+        ipv4_address: 10.10.0.3
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "81:80"
+  db:
+    container_name: hennie-belt-exam-postgres-db
+    networks:
+      custom_network:
+        ipv4_address: 10.10.0.4
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_DB: basic3tier
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin123
+      PGDATA: /var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+  pgadmin:
+    container_name: hennie-belt-exam-pgadmin4
+    networks:
+      custom_network:
+        ipv4_address: 10.10.0.5
+    image: dpage/pgadmin4:latest
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: henniefrancis@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: henniefrancis
+      PGADMIN_LISTEN_PORT: 8080
+    ports:
+      - "8080:8080"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
 
 volumes:
- db-data:
- pgadmin-data:
+  db-data:
+  pgadmin-data:
+
+networks:
+  custom_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.10.0.0/16
