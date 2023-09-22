@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hennie-belt-exam-backend-deployment
+  namespace: hennie-belt-exam
+  labels:
+    app: hennie-belt-exam-backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hennie-belt-exam-backend
+  template:
+    metadata:
+      labels:
+        app: hennie-belt-exam-backend
+    spec:
+      containers:
+      - name: hennie-belt-exam-backend
+        image: dotcoresolutions/hennie-belt-exam-api:devops
+        ports:
+        - containerPort: 81
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hennie-belt-exam-backend-service
+spec:
+  selector:
+    app: hennie-belt-exam-backend
+  ports:
+    - protocol: TCP
+      port: 81
+      targetPort: 81
+  type: ClusterIP

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hennie-belt-exam-database-deployment
+  namespace: hennie-belt-exam
+  labels:
+    app: hennie-belt-exam-database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hennie-belt-exam-database
+  template:
+    metadata:
+      labels:
+        app: hennie-belt-exam-database
+    spec:
+      containers:
+      - name: hennie-belt-exam-database
+        image: postgres:latest
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_USER
+          value: "postgres"
+        - name: POSTGRES_PASSWORD
+          value: "admin123"
+        - name: POSTGRES_DB
+          value: "basic3tier"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hennie-belt-exam-database-service
+spec:
+  selector:
+    app: hennie-belt-exam-database
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+  type: ClusterIP
