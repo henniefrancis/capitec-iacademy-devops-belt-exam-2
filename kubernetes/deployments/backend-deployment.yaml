@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hennie-belt-exam-backend-deployment
+  namespace: hennie-belt-exam
+  labels:
+    app: hennie-belt-exam
+spec:
+  selector:
+    matchLabels:
+      app: hennie-belt-exam
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: hennie-belt-exam
+    spec:
+      containers:
+      - name: hennie-belt-exam-backend
+        image: dotcoresolutions/hennie-belt-exam-api:devops
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5100
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"

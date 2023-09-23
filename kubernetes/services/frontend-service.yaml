@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hennie-belt-exam-frontend-service
+  namespace: hennie-belt-exam
+  labels:
+    app: hennie-belt-exam
+spec:
+  selector:
+    app: hennie-belt-exam
+  ports:
+    - protocol: TCP
+      name: http
+      port: 82
+      targetPort: 5000

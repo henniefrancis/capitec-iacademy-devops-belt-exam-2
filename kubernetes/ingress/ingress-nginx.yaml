@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /   #new 
+  name: hennie-belt-exam-frontend
+  namespace: hennie-belt-exam
+spec:
+  tls:
+  - hosts:
+    - hennie-belt-exam.devops
+    secretName: hennie-belt-exam-tls-secret
+  rules:
+  - host: hennie-belt-exam.devops
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: hennie-belt-exam-frontend-service
+            port:
+              number: 82
